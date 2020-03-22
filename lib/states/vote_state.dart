@@ -85,6 +85,14 @@ class VotingScreenProvider with ChangeNotifier {
       return null;
   }
 
+  String validateName(String name) {
+// Indian Mobile number are of 10 digit only
+    if (name.length == 0)
+      return 'Pole nie moze byc puste';
+    else
+      return null;
+  }
+
   String validatePesel(String pesel) {
 // Indian Mobile number are of 10 digit only
     if (pesel.length == 11)

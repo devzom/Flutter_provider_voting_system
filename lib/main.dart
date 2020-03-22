@@ -146,6 +146,8 @@ class VotingScreen extends StatelessWidget {
                                         labelText: 'Imie i nazwisko',
                                         prefixIcon: Icon(Icons.person)),
                                     keyboardType: TextInputType.text,
+                                    validator: provider.validateName,
+                                    onFieldSubmitted: (String val) {},
                                   ),
                                 ),
                                 Container(
@@ -156,7 +158,7 @@ class VotingScreen extends StatelessWidget {
                                       prefixIcon: Icon(Icons.lock_outline),
                                     ),
                                     keyboardType: TextInputType.phone,
-                                    validator: provider.validateAge,
+                                    validator: provider.validatePesel,
                                     maxLength: 11,
                                   ),
                                 ),

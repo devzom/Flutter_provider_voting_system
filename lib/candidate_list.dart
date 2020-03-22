@@ -1,4 +1,5 @@
 import 'package:Flutter_provider_voting_system/thanks_screen.dart';
+import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,15 +19,17 @@ class _CandidateListState extends State<CandidateList> {
 
   final candidates = List<Candidate>.generate(
     10,
-    (
-      i,
-    ) =>
-        Candidate(
-      'kandydat $i',
+    (i) => Candidate(
+      'Kandydat $i',
       '$i',
       '$i',
     ),
   );
+
+  // final candidateInfo = List<Candidate>.generate()
+  final List _suggestions = <WordPair>[];
+  final wordPair = WordPair.random().asPascalCase;
+  // return Text(wordPair.asPascalCase);
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +37,11 @@ class _CandidateListState extends State<CandidateList> {
       body: Container(
         child: ListView.builder(
             padding: EdgeInsets.fromLTRB(10, 40, 20, 20),
-            itemCount: candidates.length,
+            itemCount: 10,
             itemBuilder: (context, index) {
+              if (index >= _suggestions.length) {
+                _suggestions.addAll(generateWordPairs().take(10));
+              }
               return Card(
                 child: ListTile(
                   leading: CircleAvatar(
@@ -43,10 +49,12 @@ class _CandidateListState extends State<CandidateList> {
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
                   ),
-                  title: Text('Imię ${candidates[index].name}'
-                          '\n' +
-                      'Nazwisko ${candidates[index].lastName}' +
-                      '\n' +
+                  title: Text('$wordPair'),
+                  subtitle: Text(
+                      // 'Imi? ${candidates[index].name}'
+                      //       '\n' +
+                      //   'Nazwisko ${candidates[index].lastName}' +
+                      //   '\n' +
                       'Wiek ${candidates[index].age}'),
                   trailing: OutlineButton(
                     child: Text(
@@ -59,8 +67,10 @@ class _CandidateListState extends State<CandidateList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              ThankYouPage(candidate: candidates[index]),
+                          builder: (context) => ThankYouPage(
+                            candidate: candidates[index],
+                            wordPair: WordPair.random(),
+                          ),
                         ),
                       );
                     },
