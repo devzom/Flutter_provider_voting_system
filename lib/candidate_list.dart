@@ -45,7 +45,7 @@ class _CandidateListState extends State<CandidateList> {
                   ),
                   title: Text('Imię ${candidates[index].name}'
                           '\n' +
-                      'Naziwsko ${candidates[index].lastName}' +
+                      'Nazwisko ${candidates[index].lastName}' +
                       '\n' +
                       'Wiek ${candidates[index].age}'),
                   trailing: OutlineButton(

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../candidate_list.dart';
 
@@ -8,8 +9,11 @@ class VotingScreenProvider with ChangeNotifier {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _elgiblityMessage = '';
   bool _isElgible;
-  bool _autoValidate = false;
+  bool _autoValidate = true;
   int _ageInput;
+
+  int _peselInput;
+  String _nameInput;
 
   //! create getter for values\
   GlobalKey get formKey => _formKey;
@@ -17,6 +21,9 @@ class VotingScreenProvider with ChangeNotifier {
   bool get isElgible => _isElgible;
   bool get autoValidate => _autoValidate;
   int get ageInput => _ageInput;
+
+  int get peselInput => _peselInput;
+  String get nameInput => _nameInput;
 
   //! initialize voteState for later use in ChangeNotifier consumer
   void voteState() {}
@@ -26,6 +33,21 @@ class VotingScreenProvider with ChangeNotifier {
       notElgibleForVoting();
     else
       elgibleforVoting();
+  }
+
+  void checkPesel(int pesel) {
+    if ((pesel.toString()).length == 11) {
+      elgibleforVoting();
+    } else {
+      // notElgibleForVoting();
+      wrongPesel();
+    }
+  }
+
+  void wrongPesel() {
+    _elgiblityMessage = 'Pesel jest niepoprawny lub za krótki!';
+    _isElgible = false;
+    notifyListeners();
   }
 
   void notElgibleForVoting() {
@@ -59,6 +81,14 @@ class VotingScreenProvider with ChangeNotifier {
 // Indian Mobile number are of 10 digit only
     if (age.length == 0)
       return 'Pole nie moze byc puste';
+    else
+      return null;
+  }
+
+  String validatePesel(String pesel) {
+// Indian Mobile number are of 10 digit only
+    if (pesel.length == 11)
+      return 'Nr Pesel musi mieć 11 znaków';
     else
       return null;
   }

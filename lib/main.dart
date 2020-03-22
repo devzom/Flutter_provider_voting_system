@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'states/vote_state.dart';
 import 'candidate_list.dart';
+import 'thanks_screen.dart';
 
 void main() {
   runApp(VotingApp());
@@ -30,88 +31,75 @@ class _VotingAppState extends State<VotingApp> {
       routes: {
         '/validationScreen': (context) => VotingScreen(),
         '/candidateList': (context) => CandidateList(),
+        '/thankYouScreen': (context) => ThankYouPage(),
       },
     );
   }
 }
 
 class StartScreen extends StatelessWidget {
-  // final Shader linearGradient = LinearGradient(
-  //   colors: <Color>[Colors.white, Colors.red],
-  // ).createShader(Rect.fromLTRB(150.0, 0.0, 250.0, 50.0));
-
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(
-                  "https://image.freepik.com/darmowe-zdjecie/osoba-machajaca-flaga-rzeczypospolitej-polskiej_53876-21034.jpg"),
-              fit: BoxFit.fitHeight,
-              colorFilter: new ColorFilter.mode(
-                  Colors.black.withOpacity(0.4), BlendMode.dstATop),
+    return Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('polish_flag.jpg'),
+            fit: BoxFit.fill,
+            colorFilter: new ColorFilter.mode(
+                Colors.black.withOpacity(0.4), BlendMode.dstATop),
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Wybory Prezydenckie \n2020',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 35,
+                  fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
             ),
-          ),
-        ),
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                'Wybory Prezydenckie \n2020',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 35,
-                    fontWeight: FontWeight.w600),
-                // TextStyle(
-                //     fontSize: 30.0,
-                //     fontWeight: FontWeight.bold,
-                //     foreground: Paint()..shader = linearGradient),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 75,
-              ),
-              OutlineButton(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'Przejd? do g?osowania ',
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(letterSpacing: .5),
-                      ),
+            SizedBox(
+              height: 75,
+            ),
+            OutlineButton(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Przejdz do glosowania ',
+                    style: GoogleFonts.lato(
+                      textStyle: TextStyle(letterSpacing: .5),
                     ),
-                    Icon(Icons.flag)
-                  ],
-                ),
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushReplacementNamed('/validationScreen');
-                },
-                color: Colors.red,
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                borderSide: BorderSide(width: 2, color: Colors.white),
-                highlightElevation: 10,
-                highlightColor: Colors.red,
-                splashColor: Colors.white,
+                  ),
+                  Icon(Icons.flag)
+                ],
               ),
-            ],
-          ),
-        ),
-      ],
-    );
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/validationScreen');
+              },
+              color: Colors.red,
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+              borderSide: BorderSide(width: 2, color: Colors.white),
+              highlightElevation: 10,
+              highlightColor: Colors.red,
+              highlightedBorderColor: Colors.white,
+              splashColor: Colors.white,
+            ),
+          ],
+        ));
   }
 }
 
 class VotingScreen extends StatelessWidget {
   final ageController = TextEditingController();
+  final peselController = TextEditingController();
+  final nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -139,27 +127,37 @@ class VotingScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 SizedBox(
-                                  height: 30,
+                                  height: 10,
                                 ),
                                 Text(
-                                    'Sprawd? czy masz prawo do g?osowania w wyborach prezydenckich 2020',
+                                    'Sprawdz czy mozesz glosowac w Wyborach Prezydenckich \n2020',
                                     textAlign: TextAlign.center,
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline5
                                         .apply(color: Colors.black87)),
                                 SizedBox(
-                                  height: 30,
+                                  height: 10,
                                 ),
                                 Container(
-                                  width: 100,
                                   child: TextFormField(
-                                    controller: ageController,
+                                    controller: nameController,
                                     decoration: InputDecoration(
-                                      labelText: 'Twój wiek',
+                                        labelText: 'Imie i nazwisko',
+                                        prefixIcon: Icon(Icons.person)),
+                                    keyboardType: TextInputType.text,
+                                  ),
+                                ),
+                                Container(
+                                  child: TextFormField(
+                                    controller: peselController,
+                                    decoration: InputDecoration(
+                                      labelText: 'Pesel',
+                                      prefixIcon: Icon(Icons.lock_outline),
                                     ),
                                     keyboardType: TextInputType.phone,
                                     validator: provider.validateAge,
+                                    maxLength: 11,
                                   ),
                                 ),
                                 SizedBox(
@@ -167,18 +165,18 @@ class VotingScreen extends StatelessWidget {
                                 ),
                                 OutlineButton(
                                   child: Text(
-                                    'Sprawd?',
+                                    'Sprawdz',
                                     style: GoogleFonts.lato(
                                       textStyle: TextStyle(letterSpacing: .5),
                                     ),
                                   ),
                                   onPressed: () {
                                     // getting text from FormField
-                                    final int age =
-                                        int.parse(ageController.text.trim());
+                                    final int pesel =
+                                        int.parse(peselController.text.trim());
 
                                     //call method to check the age
-                                    provider.checkElgiblity(age);
+                                    provider.checkPesel(pesel);
                                   },
                                   color: Colors.white,
                                   textColor: Colors.red,
@@ -211,7 +209,7 @@ class VotingScreen extends StatelessWidget {
                                               OutlineButton(
                                                 child: Row(
                                                   children: <Widget>[
-                                                    Text('G?osuj! '),
+                                                    Text('Glosuj! '),
                                                     Icon(Icons
                                                         .arrow_forward_ios),
                                                   ],
@@ -219,11 +217,15 @@ class VotingScreen extends StatelessWidget {
                                                 onPressed: () {
                                                   // Navigate to the second screen using a named route.
 
-                                                  // Navigator.pushNamed(
-                                                  //     context, '/candidateList');
-                                                  provider
-                                                      .navigateAndDisplaySelection(
-                                                          context);
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            CandidateList()),
+                                                  );
+                                                  // provider
+                                                  //     .navigateAndDisplaySelection(
+                                                  //         context);
                                                 },
                                                 color: Colors.white,
                                                 textColor: Colors.red,
