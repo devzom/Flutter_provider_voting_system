@@ -8,8 +8,11 @@ class ThankYouPage extends StatelessWidget {
 
   // const ThankYouPage({Key key, this.wordPair}) : super(key: key);
 
-  const ThankYouPage({Key key, this.candidate, this.wordPair})
-      : super(key: key);
+  const ThankYouPage({
+    Key key,
+    this.candidate,
+    this.wordPair,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
